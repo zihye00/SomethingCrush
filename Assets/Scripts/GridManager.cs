@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -18,9 +19,45 @@ public class GridManager : MonoBehaviour
 
     //ppopulate : 채우다
 
+    // 점수 관련
+    public GameObject GameOverMenu;
+    public TextMeshProUGUI MovesText;
+    public TextMeshProUGUI ScoreText;
+
+    public int StartingMoves = 10;
+    private int _numMoves;
+    public int NumMoves
+    {
+        get
+        {
+            return _numMoves;
+        }
+        set
+        {
+            _numMoves = value;
+            MovesText.text = _numMoves.ToString();
+        }
+    }
+    private int _score;
+    public int Score
+    {
+        get
+        {
+            return _score;
+        }
+        set
+        {
+            _score = value;
+            ScoreText.text = _score.ToString();
+        }
+    }
+
     private void Awake()
     {
         Instance = this;
+        Score = 0;
+        NumMoves = StartingMoves;
+        GameOverMenu.SetActive(false);
     }
 
     private void Start()
@@ -104,10 +141,15 @@ public class GridManager : MonoBehaviour
         }
         else
         {
+            NumMoves--;
             do
             {
                 FillHoles();
             }while (CheckMatches());
+            if (NumMoves <= 0)
+            {
+                NumMoves = 0; GameOver();
+            }
         }
     }
 
@@ -150,6 +192,7 @@ public class GridManager : MonoBehaviour
         {
             renderer.sprite = null;
         }
+        Score += matchedTiles.Count;
         return matchedTiles.Count > 0;
     }
 
@@ -205,5 +248,11 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void GameOver()
+    {
+        PlayerPrefs.SetInt("Score", Score);
+        GameOverMenu.SetActive(true);
     }
 }

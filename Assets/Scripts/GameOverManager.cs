@@ -15,7 +15,7 @@ public class GameOverManager : MonoBehaviour
 
     private void OnEnable()
     {
-        int score = PlayerPrefs.GetInt("score");
+        int score = PlayerPrefs.GetInt("Score");
         int highScore;
         if (PlayerPrefs.HasKey("highScore"))
         {
@@ -49,7 +49,7 @@ public class GameOverManager : MonoBehaviour
     static void ResetHighScore()
     {
         PlayerPrefs.SetInt("highScore", 0);
-        PlayerPrefs.SetInt("score", 0);
+        PlayerPrefs.SetInt("Score", 0);
     }
 #endif
 }
